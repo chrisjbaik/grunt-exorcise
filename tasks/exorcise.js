@@ -54,7 +54,11 @@ module.exports = function(grunt) {
       })
 
       // setup exorcist
-      var ex = exorcist(dest, options.url, options.root)
+      var url = null;
+      if (options.mapUrlRoot && !options.url) {
+        url = options.url || file.dest.replace(new RegExp('^' + file.orig.cwd), options.mapUrlRoot);
+      }
+      var ex = exorcist(dest, url, options.root)
       ex.on('missing-map', function(msg) { console.error(msg); })
 
       stream.pipe(ex).pipe(write)
